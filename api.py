@@ -2,11 +2,13 @@ from fastapi import FastAPI, Depends, Request
 from models.mongo_model import UserRegister, Token, User
 from fastapi.security import OAuth2PasswordRequestForm
 from mongo.db_crud import Mongo
+from auth.crypto_context import CryptoContext
 from src.util import Middleware
 
 app = FastAPI()
 db = Mongo()
-middle = Middleware()
+crypto_context = CryptoContext()
+middle = Middleware(db=db, crypto_context=crypto_context)
 
 
 @app.post("/user/signup", tags=["auth"])
